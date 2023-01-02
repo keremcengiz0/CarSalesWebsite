@@ -1,5 +1,8 @@
 package com.keremcengiz0.CarSalesProject.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -12,8 +15,6 @@ public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "advert_no")
-    private Long advertNo;
     private String brand;
     private String series;
     private String model;
@@ -24,10 +25,7 @@ public class Vehicle {
     @Column(name = "advert_date", nullable = false, updatable = false)
     private LocalDate advertDate;
 
-    @OneToOne
-    private Advert advert;
-
     @ManyToOne
-    private Category categories;
+    private Category category;
 
 }

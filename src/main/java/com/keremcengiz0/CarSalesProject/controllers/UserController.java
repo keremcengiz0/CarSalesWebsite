@@ -1,8 +1,10 @@
 package com.keremcengiz0.CarSalesProject.controllers;
 
+import com.keremcengiz0.CarSalesProject.dtos.AdvertDto;
 import com.keremcengiz0.CarSalesProject.dtos.UserDto;
 import com.keremcengiz0.CarSalesProject.entities.User;
 import com.keremcengiz0.CarSalesProject.responses.GetAllUsersResponse;
+import com.keremcengiz0.CarSalesProject.responses.GetOneUserAdvertsResponse;
 import com.keremcengiz0.CarSalesProject.responses.GetOneUserResponse;
 import com.keremcengiz0.CarSalesProject.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,13 +41,21 @@ public class UserController {
         return userResponse;
     }
 
+    @GetMapping("/{userId}/adverts")
+    public GetOneUserAdvertsResponse getOneUserAdvertsResponse(@PathVariable(name = "userId") Long id) {
+        List<AdvertDto> advertDto = this.userService.getOneUserAdverts(id);
+        GetOneUserAdvertsResponse getOneUserAdvertsResponse = new GetOneUserAdvertsResponse();
+        getOneUserAdvertsResponse.setAdvertDto(advertDto);
+        return getOneUserAdvertsResponse;
+    }
+
     @PostMapping
     public User createUser(@RequestBody User newUser) {
         return this.userService.saveOneUser(newUser);
     }
 
     @DeleteMapping("/{userId}")
-    public void deleteOneUser(@PathVariable Long userId) {
+    public void deleteOneUser(@PathVariable(name = "userId") Long userId) throws Exception {
         this.userService.deleteById(userId);
     }
 

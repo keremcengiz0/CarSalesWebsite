@@ -1,5 +1,6 @@
 package com.keremcengiz0.CarSalesProject.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import javax.persistence.*;
 import java.util.List;
@@ -20,6 +21,7 @@ public class User {
     @Column(name = "password")
     String password;
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Advert> adverts;
 
