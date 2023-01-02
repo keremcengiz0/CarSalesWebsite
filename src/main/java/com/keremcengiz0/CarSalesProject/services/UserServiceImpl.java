@@ -3,9 +3,9 @@ package com.keremcengiz0.CarSalesProject.services;
 import com.keremcengiz0.CarSalesProject.dtos.UserDto;
 import com.keremcengiz0.CarSalesProject.entities.User;
 import com.keremcengiz0.CarSalesProject.repositories.UserRepository;
-import com.keremcengiz0.CarSalesProject.responses.UserResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,18 +27,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto getOneUserById(Long id) throws Exception {
+        Optional<User> userOptional = this.userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            throw new Exception("User not found!");
+        }
+
+        User user = userOptional.get();
+
+        return this.modelMapper.map(user, UserDto.class);
+    }
+
+    @Override
     public User saveOneUser(User newUser) {
         return this.userRepository.save(newUser);
     }
 
 
     @Override
-    public void deleteById(Long userId) {
-        Optional<User> user = this.userRepository.findById(userId);
+    public void deleteById(Long id) {
+        Optional<User> user = this.userRepository.findById(id);
         if (user.isPresent()) {
             User foundUserToDelete = user.get();
             this.userRepository.deleteById(foundUserToDelete.getId());
         }
     }
+
 
 }

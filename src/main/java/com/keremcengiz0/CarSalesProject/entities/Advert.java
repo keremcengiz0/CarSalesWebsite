@@ -19,6 +19,8 @@ public class Advert {
     @Column(columnDefinition = "text")
     private String description;
 
+    private String title;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Vehicle vehicle;
 

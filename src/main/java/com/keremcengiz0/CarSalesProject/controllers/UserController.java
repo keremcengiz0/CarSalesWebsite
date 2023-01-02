@@ -2,14 +2,13 @@ package com.keremcengiz0.CarSalesProject.controllers;
 
 import com.keremcengiz0.CarSalesProject.dtos.UserDto;
 import com.keremcengiz0.CarSalesProject.entities.User;
-import com.keremcengiz0.CarSalesProject.responses.UserResponse;
+import com.keremcengiz0.CarSalesProject.responses.GetAllUsersResponse;
+import com.keremcengiz0.CarSalesProject.responses.GetOneUserResponse;
 import com.keremcengiz0.CarSalesProject.services.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
@@ -24,10 +23,19 @@ public class UserController {
     }
 
     @GetMapping("")
-    public UserResponse getAllUserResponse() {
+    public GetAllUsersResponse getAllUserResponse() {
         List<UserDto> users = userService.getAllUsers();
-        UserResponse userResponse = new UserResponse();
+        GetAllUsersResponse userResponse = new GetAllUsersResponse();
         userResponse.setUsers(users);
+        return userResponse;
+    }
+
+
+    @GetMapping("/{userId}")
+    public GetOneUserResponse getOneUserResponse(@PathVariable(name = "userId") Long id) throws Exception {
+        UserDto userDto = this.userService.getOneUserById(id);
+        GetOneUserResponse userResponse = new GetOneUserResponse();
+        userResponse.setUserDto(userDto);
         return userResponse;
     }
 
