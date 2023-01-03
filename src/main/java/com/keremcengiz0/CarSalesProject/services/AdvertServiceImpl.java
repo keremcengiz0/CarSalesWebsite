@@ -73,8 +73,8 @@ public class AdvertServiceImpl implements AdvertService {
 
         User user = this.modelMapper.map(userDto, User.class);
         advert.setUser(user);
-
         this.advertRepository.save(advert);
+        toSaveAdvertDto.setId(advert.getId());
         return toSaveAdvertDto;
     }
 
