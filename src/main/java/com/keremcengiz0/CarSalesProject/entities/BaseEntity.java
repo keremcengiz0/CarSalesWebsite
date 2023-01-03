@@ -3,7 +3,6 @@ package com.keremcengiz0.CarSalesProject.entities;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Optional;
 
 @Data

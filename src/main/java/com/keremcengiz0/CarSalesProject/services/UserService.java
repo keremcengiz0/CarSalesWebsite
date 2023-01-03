@@ -3,7 +3,6 @@ package com.keremcengiz0.CarSalesProject.services;
 import com.keremcengiz0.CarSalesProject.dtos.AdvertDto;
 import com.keremcengiz0.CarSalesProject.dtos.UserDto;
 import com.keremcengiz0.CarSalesProject.entities.User;
-
 import java.util.List;
 
 public interface UserService {
