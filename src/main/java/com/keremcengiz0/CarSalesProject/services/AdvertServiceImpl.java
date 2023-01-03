@@ -58,7 +58,7 @@ public class AdvertServiceImpl implements AdvertService {
 
     @Override
     public AdvertDto createOneAdvert(AdvertCreateRequest newAdvertRequest) throws Exception {
-        UserDto userDto = this.userService.getOneUserById(newAdvertRequest.getUser().getId());
+        UserDto userDto = this.userService.getOneUserById(newAdvertRequest.getUserId());
 
         if (userDto == null) {
             throw new Exception("No user found to add advert.");

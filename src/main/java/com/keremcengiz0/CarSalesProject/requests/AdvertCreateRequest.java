@@ -6,8 +6,7 @@ import lombok.Data;
 
 @Data
 public class AdvertCreateRequest {
-    private Long id;
-    private User user;
+    private Long userId;
     private String description;
     private Vehicle vehicle;
     private String title;
