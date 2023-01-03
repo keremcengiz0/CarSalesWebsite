@@ -4,7 +4,9 @@ import com.keremcengiz0.CarSalesProject.dtos.AdvertDto;
 import com.keremcengiz0.CarSalesProject.dtos.UserDto;
 import com.keremcengiz0.CarSalesProject.entities.Advert;
 import com.keremcengiz0.CarSalesProject.entities.User;
+import com.keremcengiz0.CarSalesProject.entities.Vehicle;
 import com.keremcengiz0.CarSalesProject.repositories.AdvertRepository;
+import com.keremcengiz0.CarSalesProject.repositories.UserRepository;
 import com.keremcengiz0.CarSalesProject.requests.AdvertCreateRequest;
 import com.keremcengiz0.CarSalesProject.requests.AdvertUpdateRequest;
 import org.modelmapper.ModelMapper;
@@ -20,12 +22,15 @@ public class AdvertServiceImpl implements AdvertService {
     private UserService userService;
     private AdvertRepository advertRepository;
     private ModelMapper modelMapper;
+    private final UserRepository userRepository;
 
     @Autowired
-    public AdvertServiceImpl(UserService userService, AdvertRepository advertRepository, ModelMapper modelMapper) {
+    public AdvertServiceImpl(UserService userService, AdvertRepository advertRepository, ModelMapper modelMapper,
+                             UserRepository userRepository) {
         this.userService = userService;
         this.advertRepository = advertRepository;
         this.modelMapper = modelMapper;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -81,18 +86,36 @@ public class AdvertServiceImpl implements AdvertService {
     @Override
     public AdvertDto updateOneAdvert(Long id, AdvertUpdateRequest updateRequest) throws Exception {
         Optional<Advert> advert = this.advertRepository.findById(id);
+        Optional<Vehicle> vehicle = Optional.ofNullable(advert.get().getVehicle());
 
         if (advert.isEmpty()) {
-            throw new Exception("No advert found to update.");
+            throw new Exception("No advert found to update!");
+        }
+
+        if(vehicle.isEmpty()) {
+            throw new Exception("No vehicle found to update!");
         }
 
         Advert toUpdateAdvert = advert.get();
         toUpdateAdvert.setTitle(updateRequest.getTitle());
-        toUpdateAdvert.setVehicle(updateRequest.getVehicle());
         toUpdateAdvert.setDescription(updateRequest.getDescription());
+
+        Vehicle toUpdateVehicle = vehicle.get();
+        toUpdateVehicle.setAdvertDate(updateRequest.getVehicle().getAdvertDate());
+        toUpdateVehicle.setKm(updateRequest.getVehicle().getKm());
+        toUpdateVehicle.setFuel(updateRequest.getVehicle().getFuel());
+        toUpdateVehicle.setBrand(updateRequest.getVehicle().getBrand());
+        toUpdateVehicle.setModel(updateRequest.getVehicle().getModel());
+        toUpdateVehicle.setCategory(updateRequest.getVehicle().getCategory());
+        toUpdateVehicle.setPrice(updateRequest.getVehicle().getPrice());
+        toUpdateVehicle.setYear(updateRequest.getVehicle().getYear());
+        toUpdateVehicle.setSeries(updateRequest.getVehicle().getSeries());
+
+        toUpdateAdvert.setVehicle(toUpdateVehicle);
 
         AdvertDto updatedAdvert = this.modelMapper.map(toUpdateAdvert, AdvertDto.class);
         this.advertRepository.save(toUpdateAdvert);
+        updatedAdvert.setId(toUpdateAdvert.getId());
 
         return updatedAdvert;
     }

@@ -1,6 +1,5 @@
 package com.keremcengiz0.CarSalesProject.dtos;
 
-import com.keremcengiz0.CarSalesProject.entities.User;
 import com.keremcengiz0.CarSalesProject.entities.Vehicle;
 import lombok.Data;
 
