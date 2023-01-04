@@ -6,7 +6,6 @@ import com.keremcengiz0.CarSalesProject.entities.Advert;
 import com.keremcengiz0.CarSalesProject.entities.User;
 import com.keremcengiz0.CarSalesProject.entities.Vehicle;
 import com.keremcengiz0.CarSalesProject.repositories.AdvertRepository;
-import com.keremcengiz0.CarSalesProject.repositories.UserRepository;
 import com.keremcengiz0.CarSalesProject.requests.AdvertCreateRequest;
 import com.keremcengiz0.CarSalesProject.requests.AdvertUpdateRequest;
 import org.modelmapper.ModelMapper;
@@ -22,15 +21,12 @@ public class AdvertServiceImpl implements AdvertService {
     private UserService userService;
     private AdvertRepository advertRepository;
     private ModelMapper modelMapper;
-    private final UserRepository userRepository;
 
     @Autowired
-    public AdvertServiceImpl(UserService userService, AdvertRepository advertRepository, ModelMapper modelMapper,
-                             UserRepository userRepository) {
+    public AdvertServiceImpl(UserService userService, AdvertRepository advertRepository, ModelMapper modelMapper) {
         this.userService = userService;
         this.advertRepository = advertRepository;
         this.modelMapper = modelMapper;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -38,12 +34,13 @@ public class AdvertServiceImpl implements AdvertService {
         return this.advertRepository.findAll().stream().map(advert -> modelMapper.map(advert, AdvertDto.class)).collect(Collectors.toList());
     }
 
+
     @Override
     public void deleteOneAdvertById(Long id) throws Exception {
         Optional<Advert> advert = this.advertRepository.findById(id);
 
         if (advert.isEmpty()) {
-            throw new Exception("Advert not found!");
+            throw new Exception("Advert not found to delete!");
         }
 
         Advert foundAdvertToDelete = advert.get();
@@ -119,6 +116,8 @@ public class AdvertServiceImpl implements AdvertService {
 
         return updatedAdvert;
     }
+
+
 
 
 }
