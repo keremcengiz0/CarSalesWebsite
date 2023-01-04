@@ -3,6 +3,7 @@ package com.keremcengiz0.CarSalesProject.controllers;
 import com.keremcengiz0.CarSalesProject.dtos.AdvertDto;
 import com.keremcengiz0.CarSalesProject.requests.AdvertCreateRequest;
 import com.keremcengiz0.CarSalesProject.requests.AdvertUpdateRequest;
+import com.keremcengiz0.CarSalesProject.responses.GetAllAdvertsByBrandResponse;
 import com.keremcengiz0.CarSalesProject.responses.GetAllAdvertsResponse;
 import com.keremcengiz0.CarSalesProject.responses.GetOneAdvertResponse;
 import com.keremcengiz0.CarSalesProject.services.AdvertService;
@@ -36,6 +37,14 @@ public class AdvertController {
         GetOneAdvertResponse getOneAdvertResponse = new GetOneAdvertResponse();
         getOneAdvertResponse.setAdvertDto(advertDto);
         return getOneAdvertResponse;
+    }
+
+    @GetMapping("/brand/{brand}")
+    public GetAllAdvertsByBrandResponse getAllAdvertsByBrandResponse(@PathVariable(value = "brand") String brand) {
+        List<AdvertDto> advertDto = this.advertService.getAllAdvertsByBrand(brand);
+        GetAllAdvertsByBrandResponse getAllAdvertsByBrandResponse = new GetAllAdvertsByBrandResponse();
+        getAllAdvertsByBrandResponse.setAdverts(advertDto);
+        return getAllAdvertsByBrandResponse;
     }
 
     @PostMapping

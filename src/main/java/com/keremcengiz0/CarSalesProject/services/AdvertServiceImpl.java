@@ -34,6 +34,11 @@ public class AdvertServiceImpl implements AdvertService {
         return this.advertRepository.findAll().stream().map(advert -> modelMapper.map(advert, AdvertDto.class)).collect(Collectors.toList());
     }
 
+    @Override
+    public List<AdvertDto> getAllAdvertsByBrand(String brand) {
+        return this.advertRepository.getAllAdvertsByBrand(brand).stream().map(advert -> modelMapper.map(advert, AdvertDto.class)).collect(Collectors.toList());
+    }
+
 
     @Override
     public void deleteOneAdvertById(Long id) throws Exception {

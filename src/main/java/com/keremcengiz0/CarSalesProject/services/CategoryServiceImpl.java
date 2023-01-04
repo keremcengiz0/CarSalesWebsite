@@ -31,6 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category category = this.modelMapper.map(toSaveCategoryDto, Category.class);
         this.categoryRepository.save(category);
+        toSaveCategoryDto.setId(category.getId());
 
         return toSaveCategoryDto;
     }

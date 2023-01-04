@@ -27,5 +27,4 @@ public class Vehicle {
 
     @ManyToOne
     private Category category;
-
 }
