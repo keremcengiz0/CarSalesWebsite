@@ -2,9 +2,11 @@ package com.keremcengiz0.CarSalesProject.services;
 
 import com.keremcengiz0.CarSalesProject.dtos.AdvertDto;
 import com.keremcengiz0.CarSalesProject.dtos.UserDto;
+import com.keremcengiz0.CarSalesProject.entities.Role;
 import com.keremcengiz0.CarSalesProject.entities.User;
 import com.keremcengiz0.CarSalesProject.repositories.AdvertRepository;
 import com.keremcengiz0.CarSalesProject.repositories.UserRepository;
+import com.keremcengiz0.CarSalesProject.requests.UserRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.util.Collections;
@@ -48,8 +50,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User saveOneUser(User newUser) {
-        return this.userRepository.save(newUser);
+    public User saveOneUser(UserRequest newUser) {
+        User user = new User();
+        user.setUserName(newUser.getUserName());
+        user.setPassword(newUser.getPassword());
+        user.setRole(Role.USER);
+        return this.userRepository.save(user);
     }
 
 

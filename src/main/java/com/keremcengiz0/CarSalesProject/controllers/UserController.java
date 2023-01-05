@@ -3,6 +3,7 @@ package com.keremcengiz0.CarSalesProject.controllers;
 import com.keremcengiz0.CarSalesProject.dtos.AdvertDto;
 import com.keremcengiz0.CarSalesProject.dtos.UserDto;
 import com.keremcengiz0.CarSalesProject.entities.User;
+import com.keremcengiz0.CarSalesProject.requests.UserRequest;
 import com.keremcengiz0.CarSalesProject.responses.GetAllUsersResponse;
 import com.keremcengiz0.CarSalesProject.responses.GetOneUserAdvertsResponse;
 import com.keremcengiz0.CarSalesProject.responses.GetOneUserResponse;
@@ -50,7 +51,7 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody User newUser) {
+    public User createUser(@RequestBody UserRequest newUser) {
         return this.userService.saveOneUser(newUser);
     }
 
