@@ -15,11 +15,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_name")
+    @Column(name = "user_name", nullable = false, unique = true)
     String userName;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
