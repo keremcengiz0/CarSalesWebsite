@@ -11,6 +11,7 @@ import com.keremcengiz0.CarSalesProject.requests.AdvertUpdateRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,8 +36,25 @@ public class AdvertServiceImpl implements AdvertService {
     }
 
     @Override
-    public List<AdvertDto> getAllAdvertsByBrand(String brand) {
+    public List<AdvertDto> getAllAdvertsByBrand(String brand) throws Exception {
+        List<Advert> adverts = this.advertRepository.getAllAdvertsByBrand(brand);
+
+        if (adverts.isEmpty()) {
+            throw new Exception("No vehicle found for this brand!");
+        }
+
         return this.advertRepository.getAllAdvertsByBrand(brand).stream().map(advert -> modelMapper.map(advert, AdvertDto.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AdvertDto> getAllAdvertsByCategoryResponse(String category) throws Exception {
+        List<Advert> adverts = this.advertRepository.getAllAdvertsByCategoryResponse(category);
+
+        if (adverts.isEmpty()) {
+            throw new Exception("No vehicle found for this category! Or No such category found!");
+        }
+
+        return this.advertRepository.getAllAdvertsByCategoryResponse(category).stream().map(advert -> modelMapper.map(advert, AdvertDto.class)).collect(Collectors.toList());
     }
 
 
@@ -94,7 +112,7 @@ public class AdvertServiceImpl implements AdvertService {
             throw new Exception("No advert found to update!");
         }
 
-        if(vehicle.isEmpty()) {
+        if (vehicle.isEmpty()) {
             throw new Exception("No vehicle found to update!");
         }
 
@@ -121,8 +139,6 @@ public class AdvertServiceImpl implements AdvertService {
 
         return updatedAdvert;
     }
-
-
 
 
 }

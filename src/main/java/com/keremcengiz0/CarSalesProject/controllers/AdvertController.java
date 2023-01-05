@@ -4,6 +4,7 @@ import com.keremcengiz0.CarSalesProject.dtos.AdvertDto;
 import com.keremcengiz0.CarSalesProject.requests.AdvertCreateRequest;
 import com.keremcengiz0.CarSalesProject.requests.AdvertUpdateRequest;
 import com.keremcengiz0.CarSalesProject.responses.GetAllAdvertsByBrandResponse;
+import com.keremcengiz0.CarSalesProject.responses.GetAllAdvertsByCategoryResponse;
 import com.keremcengiz0.CarSalesProject.responses.GetAllAdvertsResponse;
 import com.keremcengiz0.CarSalesProject.responses.GetOneAdvertResponse;
 import com.keremcengiz0.CarSalesProject.services.AdvertService;
@@ -40,12 +41,22 @@ public class AdvertController {
     }
 
     @GetMapping("/brand/{brand}")
-    public GetAllAdvertsByBrandResponse getAllAdvertsByBrandResponse(@PathVariable(value = "brand") String brand) {
+    public GetAllAdvertsByBrandResponse getAllAdvertsByBrandResponse(@PathVariable(value = "brand") String brand) throws Exception {
         List<AdvertDto> advertDto = this.advertService.getAllAdvertsByBrand(brand);
         GetAllAdvertsByBrandResponse getAllAdvertsByBrandResponse = new GetAllAdvertsByBrandResponse();
         getAllAdvertsByBrandResponse.setAdverts(advertDto);
         return getAllAdvertsByBrandResponse;
     }
+
+    @GetMapping("/kategori/{category}")
+    public GetAllAdvertsByCategoryResponse getAllAdvertsByCategoryResponse(@PathVariable(value = "category") String category) throws Exception {
+        List<AdvertDto> advertDto = this.advertService.getAllAdvertsByCategoryResponse(category);
+        GetAllAdvertsByCategoryResponse getAllAdvertsByCategoryResponse = new GetAllAdvertsByCategoryResponse();
+        getAllAdvertsByCategoryResponse.setAdverts(advertDto);
+        return getAllAdvertsByCategoryResponse;
+    }
+
+
 
     @PostMapping
     public AdvertDto createOneAdvert(@RequestBody AdvertCreateRequest newAdvertRequest) throws Exception {
