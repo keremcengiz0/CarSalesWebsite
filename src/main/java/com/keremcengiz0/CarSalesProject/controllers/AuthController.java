@@ -1,10 +1,14 @@
 package com.keremcengiz0.CarSalesProject.controllers;
 
 
+import com.keremcengiz0.CarSalesProject.entities.RefreshToken;
 import com.keremcengiz0.CarSalesProject.entities.User;
+import com.keremcengiz0.CarSalesProject.requests.RefreshRequest;
 import com.keremcengiz0.CarSalesProject.requests.UserRequest;
 import com.keremcengiz0.CarSalesProject.responses.AuthResponse;
 import com.keremcengiz0.CarSalesProject.security.JwtTokenProvider;
+import com.keremcengiz0.CarSalesProject.services.RefreshTokenService;
+import com.keremcengiz0.CarSalesProject.services.RefreshTokenServiceImpl;
 import com.keremcengiz0.CarSalesProject.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +32,19 @@ public class AuthController {
     private JwtTokenProvider jwtTokenProvider;
     private UserService userService;
     private PasswordEncoder passwordEncoder;
-
     private ModelMapper modelMapper;
+    private RefreshTokenServiceImpl refreshTokenServiceImpl;
+
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService, PasswordEncoder passwordEncoder,
+                          ModelMapper modelMapper, RefreshTokenServiceImpl refreshTokenServiceImpl) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
+        this.refreshTokenServiceImpl = refreshTokenServiceImpl;
     }
 
     @PostMapping("/login")
@@ -52,7 +59,8 @@ public class AuthController {
         User user = this.userService.getUserByUserName(loginRequest.getUserName());
 
         AuthResponse authResponse = new AuthResponse();
-        authResponse.setMessage("Bearer " + jwtToken);
+        authResponse.setAccessToken("Bearer " + jwtToken);
+        authResponse.setRefreshToken(this.refreshTokenServiceImpl.createRefreshToken(user));
         authResponse.setUserId(user.getId());
 
         return authResponse;
@@ -63,9 +71,40 @@ public class AuthController {
     public ResponseEntity<AuthResponse> register(@RequestBody UserRequest registerRequest) throws Exception {
         AuthResponse authResponse = new AuthResponse();
         this.userService.saveOneUser(registerRequest);
-        authResponse.setMessage("User successfully registered");
 
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(registerRequest.getUserName(), registerRequest.getPassword());
+        Authentication auth = authenticationManager.authenticate(authToken);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        String jwtToken = jwtTokenProvider.generateJwtToken(auth);
+        authResponse.setMessage("User successfully registered");
+        authResponse.setAccessToken("Bearer " + jwtToken);
+
+        User user = this.userService.getUserByUserName(registerRequest.getUserName());
+
+        authResponse.setRefreshToken(this.refreshTokenServiceImpl.createRefreshToken(user));
+        authResponse.setUserId(user.getId());
         return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
+
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refresh(@RequestBody RefreshRequest refreshRequest) {
+        AuthResponse response = new AuthResponse();
+        RefreshToken token = this.refreshTokenServiceImpl.getByUser(refreshRequest.getId());
+        if(token.getToken().equals(refreshRequest.getRefreshToken()) &&
+                !this.refreshTokenServiceImpl.isRefreshExpired(token)) {
+
+            User user = token.getUser();
+            String jwtToken = this.jwtTokenProvider.generateJwtTokenByUserId(user.getId());
+            response.setMessage("token successfully refreshed.");
+            response.setAccessToken("Bearer " + jwtToken);
+            response.setUserId(user.getId());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+
+        } else {
+            response.setMessage("refresh token is not valid.");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
 
     }
 
