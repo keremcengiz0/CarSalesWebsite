@@ -8,7 +8,6 @@ import com.keremcengiz0.CarSalesProject.requests.UserRequest;
 import com.keremcengiz0.CarSalesProject.responses.AuthResponse;
 import com.keremcengiz0.CarSalesProject.security.JwtTokenProvider;
 import com.keremcengiz0.CarSalesProject.services.RefreshTokenService;
-import com.keremcengiz0.CarSalesProject.services.RefreshTokenServiceImpl;
 import com.keremcengiz0.CarSalesProject.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,18 +32,18 @@ public class AuthController {
     private UserService userService;
     private PasswordEncoder passwordEncoder;
     private ModelMapper modelMapper;
-    private RefreshTokenServiceImpl refreshTokenServiceImpl;
+    private RefreshTokenService refreshTokenService;
 
 
     @Autowired
     public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService, PasswordEncoder passwordEncoder,
-                          ModelMapper modelMapper, RefreshTokenServiceImpl refreshTokenServiceImpl) {
+                          ModelMapper modelMapper, RefreshTokenService refreshTokenService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
-        this.refreshTokenServiceImpl = refreshTokenServiceImpl;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @PostMapping("/login")
@@ -60,7 +59,7 @@ public class AuthController {
 
         AuthResponse authResponse = new AuthResponse();
         authResponse.setAccessToken("Bearer " + jwtToken);
-        authResponse.setRefreshToken(this.refreshTokenServiceImpl.createRefreshToken(user));
+        authResponse.setRefreshToken(this.refreshTokenService.createRefreshToken(user));
         authResponse.setUserId(user.getId());
 
         return authResponse;
@@ -81,7 +80,7 @@ public class AuthController {
 
         User user = this.userService.getUserByUserName(registerRequest.getUserName());
 
-        authResponse.setRefreshToken(this.refreshTokenServiceImpl.createRefreshToken(user));
+        authResponse.setRefreshToken(this.refreshTokenService.createRefreshToken(user));
         authResponse.setUserId(user.getId());
         return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
 
@@ -90,9 +89,9 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<AuthResponse> refresh(@RequestBody RefreshRequest refreshRequest) {
         AuthResponse response = new AuthResponse();
-        RefreshToken token = this.refreshTokenServiceImpl.getByUser(refreshRequest.getId());
+        RefreshToken token = this.refreshTokenService.getByUser(refreshRequest.getId());
         if(token.getToken().equals(refreshRequest.getRefreshToken()) &&
-                !this.refreshTokenServiceImpl.isRefreshExpired(token)) {
+                !this.refreshTokenService.isRefreshExpired(token)) {
 
             User user = token.getUser();
             String jwtToken = this.jwtTokenProvider.generateJwtTokenByUserId(user.getId());
