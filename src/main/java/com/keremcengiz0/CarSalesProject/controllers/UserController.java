@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody UserRequest newUser) {
+    public User createUser(@RequestBody UserRequest newUser) throws Exception {
         return this.userService.saveOneUser(newUser);
     }
 

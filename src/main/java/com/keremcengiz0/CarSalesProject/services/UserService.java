@@ -8,9 +8,10 @@ import java.util.List;
 
 public interface UserService {
     List<UserDto> getAllUsers();
-    User saveOneUser(UserRequest newUser);
+    User saveOneUser(UserRequest newUser) throws Exception;
     void deleteById(Long id) throws Exception;
     UserDto getOneUserById(Long id) throws Exception;
-
+    UserDto getOneUserByUserName(String userName) throws Exception;
     List<AdvertDto> getOneUserAdverts(Long id);
+    User getUserByUserName(String userName);
 }
