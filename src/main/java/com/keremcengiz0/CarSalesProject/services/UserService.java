@@ -12,6 +12,6 @@ public interface UserService {
     void deleteById(Long id) throws Exception;
     UserDto getOneUserById(Long id) throws Exception;
     UserDto getOneUserByUserName(String userName) throws Exception;
-    List<AdvertDto> getOneUserAdverts(Long id);
+    List<AdvertDto> getOneUserAdverts(Long id) throws Exception;
     User getUserByUserName(String userName);
 }

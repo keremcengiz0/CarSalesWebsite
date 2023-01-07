@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/adverts")
-    public GetOneUserAdvertsResponse getOneUserAdvertsResponse(@PathVariable(name = "userId") Long id) {
+    public GetOneUserAdvertsResponse getOneUserAdvertsResponse(@PathVariable(name = "userId") Long id) throws Exception {
         List<AdvertDto> advertDto = this.userService.getOneUserAdverts(id);
         GetOneUserAdvertsResponse getOneUserAdvertsResponse = new GetOneUserAdvertsResponse();
         getOneUserAdvertsResponse.setAdvertDto(advertDto);

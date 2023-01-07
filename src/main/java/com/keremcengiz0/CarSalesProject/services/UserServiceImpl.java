@@ -2,6 +2,7 @@ package com.keremcengiz0.CarSalesProject.services;
 
 import com.keremcengiz0.CarSalesProject.dtos.AdvertDto;
 import com.keremcengiz0.CarSalesProject.dtos.UserDto;
+import com.keremcengiz0.CarSalesProject.entities.Advert;
 import com.keremcengiz0.CarSalesProject.entities.Role;
 import com.keremcengiz0.CarSalesProject.entities.User;
 import com.keremcengiz0.CarSalesProject.repositories.AdvertRepository;
@@ -70,8 +71,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<AdvertDto> getOneUserAdverts(Long id) {
-        return this.advertRepository.findAllById(Collections.singleton(id)).stream().map(advert -> modelMapper.map(advert, AdvertDto.class)).collect(Collectors.toList());
+    public List<AdvertDto> getOneUserAdverts(Long id) throws Exception {
+
+        Optional<User> user = userRepository.findById(id);
+
+        if(user.isEmpty()) {
+            throw new Exception("User not found!");
+        }
+
+        List<Advert> adverts = advertRepository.findAdvertsByUserId(id);
+
+
+        return this.advertRepository.findAdvertsByUserId(id).stream().map(advert -> modelMapper.map(advert,AdvertDto.class)).collect(Collectors.toList());
     }
 
 

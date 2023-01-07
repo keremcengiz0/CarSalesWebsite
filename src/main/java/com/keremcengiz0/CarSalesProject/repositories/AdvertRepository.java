@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.util.List;
+import java.util.Optional;
 
 public interface AdvertRepository extends JpaRepository<Advert, Long> {
     @Query(value = "Select a.* from advert as a "
@@ -17,4 +18,9 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
             + "inner join category as c on v.category_id = c.id "
             + "where c.category_name =:category", nativeQuery = true)
     List<Advert> getAllAdvertsByCategoryResponse(@Param("category") String category);
+
+    @Query(value = "Select a.* from advert as a "
+            + "inner join user as u on u.id = a.user_id "
+            + "where u.id =:userId", nativeQuery = true)
+    List<Advert> findAdvertsByUserId(@Param("userId") Long id);
 }
