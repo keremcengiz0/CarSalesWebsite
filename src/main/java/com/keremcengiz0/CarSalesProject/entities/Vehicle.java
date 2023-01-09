@@ -19,6 +19,8 @@ public class Vehicle {
     private String fuel;
     private String km;
     private String price;
+    private String gearType;
+
     @Column(name = "advert_date", nullable = false, updatable = false)
     private LocalDate advertDate;
 

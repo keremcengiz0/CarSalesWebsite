@@ -130,6 +130,7 @@ public class AdvertServiceImpl implements AdvertService {
         toUpdateVehicle.setPrice(updateRequest.getVehicle().getPrice());
         toUpdateVehicle.setYear(updateRequest.getVehicle().getYear());
         toUpdateVehicle.setSeries(updateRequest.getVehicle().getSeries());
+        toUpdateVehicle.setGearType(updateRequest.getVehicle().getGearType());
 
         toUpdateAdvert.setVehicle(toUpdateVehicle);
 
