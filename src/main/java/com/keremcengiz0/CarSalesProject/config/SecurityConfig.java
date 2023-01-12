@@ -81,6 +81,8 @@ public class SecurityConfig {
                         "/users/{userId}/adverts", "/users/{userId}").permitAll()
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/v3/api-docs/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/adverts")
+                .permitAll()
                 .antMatchers("/auth/**")
                 .permitAll()
                 .anyRequest().authenticated();

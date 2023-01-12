@@ -3,15 +3,19 @@ package com.keremcengiz0.CarSalesProject.services;
 import com.keremcengiz0.CarSalesProject.dtos.AdvertDto;
 import com.keremcengiz0.CarSalesProject.dtos.UserDto;
 import com.keremcengiz0.CarSalesProject.entities.Advert;
+import com.keremcengiz0.CarSalesProject.entities.Image;
 import com.keremcengiz0.CarSalesProject.entities.User;
 import com.keremcengiz0.CarSalesProject.entities.Vehicle;
 import com.keremcengiz0.CarSalesProject.repositories.AdvertRepository;
+import com.keremcengiz0.CarSalesProject.repositories.ImageRepository;
 import com.keremcengiz0.CarSalesProject.requests.AdvertCreateRequest;
 import com.keremcengiz0.CarSalesProject.requests.AdvertUpdateRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,11 +26,13 @@ public class AdvertServiceImpl implements AdvertService {
     private UserService userService;
     private AdvertRepository advertRepository;
     private ModelMapper modelMapper;
+    private ImageRepository imageRepository;
 
     @Autowired
-    public AdvertServiceImpl(UserService userService, AdvertRepository advertRepository, ModelMapper modelMapper) {
+    public AdvertServiceImpl(UserService userService, AdvertRepository advertRepository,ImageRepository imageRepository, ModelMapper modelMapper) {
         this.userService = userService;
         this.advertRepository = advertRepository;
+        this.imageRepository = imageRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -85,11 +91,14 @@ public class AdvertServiceImpl implements AdvertService {
     public AdvertDto createOneAdvert(AdvertCreateRequest newAdvertRequest) throws Exception {
         UserDto userDto = this.userService.getOneUserById(newAdvertRequest.getUserId());
 
+        LocalDate date = LocalDate.now();
+
         if (userDto == null) {
             throw new Exception("No user found to add advert.");
         }
 
         AdvertDto toSaveAdvertDto = new AdvertDto();
+        toSaveAdvertDto.setAdvertDate(date);
         toSaveAdvertDto.setTitle(newAdvertRequest.getTitle());
         toSaveAdvertDto.setDescription(newAdvertRequest.getDescription());
         toSaveAdvertDto.setVehicle(newAdvertRequest.getVehicle());
@@ -98,7 +107,19 @@ public class AdvertServiceImpl implements AdvertService {
 
         User user = this.modelMapper.map(userDto, User.class);
         advert.setUser(user);
+
         this.advertRepository.save(advert);
+
+
+        List<Image> images = new ArrayList<>();
+        for (Image image : newAdvertRequest.getImages()) {
+            Image img = new Image();
+            img.setImageUrl(image.getImageUrl());
+            img.setAdvert(advert);
+            images.add(img);
+        }
+        this.imageRepository.saveAll(images);
+
         toSaveAdvertDto.setId(advert.getId());
         return toSaveAdvertDto;
     }
@@ -121,7 +142,6 @@ public class AdvertServiceImpl implements AdvertService {
         toUpdateAdvert.setDescription(updateRequest.getDescription());
 
         Vehicle toUpdateVehicle = vehicle.get();
-        toUpdateVehicle.setAdvertDate(updateRequest.getVehicle().getAdvertDate());
         toUpdateVehicle.setKm(updateRequest.getVehicle().getKm());
         toUpdateVehicle.setFuel(updateRequest.getVehicle().getFuel());
         toUpdateVehicle.setBrand(updateRequest.getVehicle().getBrand());
