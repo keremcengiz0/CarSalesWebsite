@@ -3,7 +3,6 @@ package com.keremcengiz0.CarSalesProject.dtos;
 import com.keremcengiz0.CarSalesProject.entities.Image;
 import com.keremcengiz0.CarSalesProject.entities.Vehicle;
 import lombok.Data;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -15,4 +14,5 @@ public class AdvertDto {
     private Vehicle vehicle;
     private String title;
     private List<Image> images;
+    private AdvertUserDto user;
 }

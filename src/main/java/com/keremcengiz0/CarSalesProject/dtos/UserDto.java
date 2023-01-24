@@ -1,5 +1,6 @@
 package com.keremcengiz0.CarSalesProject.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.keremcengiz0.CarSalesProject.entities.Advert;
 import com.keremcengiz0.CarSalesProject.entities.Role;
 import lombok.Data;
