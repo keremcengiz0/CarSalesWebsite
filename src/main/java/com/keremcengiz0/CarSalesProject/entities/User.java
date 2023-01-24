@@ -21,6 +21,15 @@ public class User {
     @Column(name = "password", nullable = false)
     String password;
 
+    @Column(name = "first_name", nullable = false)
+    String firstName;
+
+    @Column(name = "last_name", nullable = false)
+    String lastName;
+
+    @Column(name = "tel_no", nullable = false)
+    String telNo;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
