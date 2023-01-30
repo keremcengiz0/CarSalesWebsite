@@ -41,10 +41,10 @@ You can visit this repository for the FrontEnd part. ==> [Car-Sales-Project-Reac
 ## Images From Project
 If you want to see more pictures of the project, please visit FrontEnd. ==> [Car-Sales-Project-React](https://github.com/keremcengiz0/CarSalesProject-react)
 
-## Home Page
+### Home Page
 ![vehicle showcase](https://user-images.githubusercontent.com/112478277/215495540-62625a01-8fa6-4bf9-b91c-eea168f3df13.png)
 
-## Advert Detail Page
+### Advert Detail Page
 ![advert-detail-page](https://user-images.githubusercontent.com/112478277/215495684-88bfd4ff-d4c1-442d-aec2-8cb4a7adcd82.png)
 
 
