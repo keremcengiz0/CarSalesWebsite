@@ -21,6 +21,15 @@ In this project, vehicles are advertised. First, you must create an account and 
 - Swagger UI
 - MySQL Workbench 8.0 CE
 
+## Cloud Technologies
+- Cloudinary 
+
+Cloudinary is an end-to-end image and video management solution for web and mobile applications. It's used to store, process, and deliver images and videos for websites and apps, handling tasks such as resizing, cropping, and optimizing media assets. Cloudinary also provides various tools and features for managing and manipulating media assets, including content delivery networks and media libraries, making it a comprehensive solution for managing media in the cloud.
+
+**Uploaded images are stored on this page.**
+
+![cloudinary-images-db](https://user-images.githubusercontent.com/112478277/215500284-99355eb6-0887-4eca-b130-bdccc5e5e87b.png)
+
 ## IDE
 - Intellij IDEA
 
